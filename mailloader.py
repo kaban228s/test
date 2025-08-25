@@ -4,26 +4,29 @@ import logging
 import email
 from pathlib import Path
 
+
+def load_config(config_path):
+    try:
+        with open(config_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        logging.error(f"Файл конфигурации {config_path} не найден")
+        return {}
+
+
 class ConfigLoader(object):
 
     def __init__(self, config_path="config.json"):
-        self.config = self.load_config(config_path)
+        self.config = load_config(config_path)
         self.downloads_dir = Path("downloads")
         self.downloads_dir.mkdir(exist_ok=True)
 
-    def load_config(self, config_path):
-        try:
-            with open(config_path, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        except FileNotFoundError:
-            logging.error(f"Файл конфигурации {config_path} не найден")
-            return {}
 
 class MailConnector:
 
     def __init__(self, config):
         self.config = config
-        self.mail = imaplib.IMAP4_SSL("email.sct.ru")
+        self.mail = imaplib.IMAP4_SSL(self.config['imap_server'])
         self.mail.login(self.config['email'], self.config['password'])
 
 class MailReader:
@@ -76,4 +79,4 @@ if __name__ == "__main__":
         else:
             print("Новых писем нет")
     else:
-        print("ошибка поиска пиисем")
+        print("ошибка поиска писем")
