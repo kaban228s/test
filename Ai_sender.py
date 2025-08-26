@@ -16,8 +16,6 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 
-load_dotenv()
-
 API_KEY = os.getenv('API_KEY')
 
 folder = Path("enhanced_images")
@@ -64,7 +62,7 @@ for i, file in enumerate(files, start=1):
       "basis": "Основание",
       "goods": "Назначение платежа",
       "total": "Всего к оплате",
-      "vat": "Ставка НДС",
+      "vat": "Ставка НДС"
     }"""},
                  {"type": "image_url", "image_url": {"url": base64_image}}
              ]}
